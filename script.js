@@ -15,7 +15,7 @@ function setup() {
         }
     }
     var grassNumber = 300;
-    var geNumber = 80;
+    var geNumber = 150;
     var predatorNumber = 130;
     var meatNumber = 10;
     var hunterNumber = 30;
@@ -104,14 +104,9 @@ function setup() {
 
         }
     }
-
     frameRate(5);
     createCanvas(matrix[0].length * side, matrix.length * side);
     background('#acacac');
-
-
-
-
 }
 
 
