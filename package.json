@@ -1,0 +1,25 @@
+{
+  "name": "xax",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArturPetrosyan2003/Xax.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArturPetrosyan2003/Xax/issues"
+  },
+  "homepage": "https://github.com/ArturPetrosyan2003/Xax#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "save": "^2.3.3",
+    "socket.io": "^2.2.0"
+  }
+}
