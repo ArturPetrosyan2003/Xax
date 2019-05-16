@@ -5,6 +5,7 @@ function setup() {
     frameRate(5);
     createCanvas(50 * side, 50 * side);
     background('#acacac');
+    socket.on('matrix', drawMatrix);
 }
 
 function drawMatrix(matrix) {
@@ -33,7 +34,16 @@ function drawMatrix(matrix) {
     }
 }
 
-socket.on('matrix', drawMatrix);
+function keyPressed(){
+    if(keyCode === 32){
+        socket.emit('clear');
+        console.log(30);
+    }
+}
 
 
+
+
+   
+    
 

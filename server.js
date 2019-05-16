@@ -177,7 +177,13 @@ function drawMatrix() {
     //matrixi uxxarkum
     io.sockets.emit('matrix', matrix);
     //----------------------
+    io.on('connection', function (socket) {
+        socket.on('clear', function(data){
+            geNumber = 0;
+            geArr = [];
+        });
+    });
 }
 //----------------------
 
-setInterval(drawMatrix, 3000);
+setInterval(drawMatrix, 500);
