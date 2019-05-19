@@ -3,9 +3,9 @@ var livingCreator = require('./livingCreator.js');
 module.exports = class Predator extends livingCreator{
     constructor(x, y, index) {
         super(x, y, index);
-        this.energy = 8;
+        this.energy = 15;
     }
-    move() {
+    move1() {
         var vandakner = Random(this.chooseCell(0));
         if (vandakner) {
             this.energy--;
@@ -14,6 +14,21 @@ module.exports = class Predator extends livingCreator{
 
             matrix[newY][newX] = 3;
             matrix[this.y][this.x] = 0;
+
+            this.x = newX;
+            this.y = newY;
+        }
+
+    }
+    move2() {
+        var vandakner = Random(this.chooseCell(1));
+        if (vandakner) {
+            this.energy--;
+            var newX = vandakner[0];
+            var newY = vandakner[1];
+
+            matrix[newY][newX] = 3;
+            matrix[this.y][this.x] = 1;
 
             this.x = newX;
             this.y = newY;

@@ -21,7 +21,7 @@ server.listen(3000, function () {
  Predator = require('./module/predator.js');
  Hunter = require('./module/hunter.js');
  Meat = require('./module/meat.js');
-
+ weather = 'spring';
 
 
 grassArr = [];
@@ -47,8 +47,8 @@ function genMatrix(n, m) {
         }
     }
     var grassNumber = 300;
-    var geNumber = 150;
-    var predatorNumber = 130;
+    var geNumber = 250;
+    var predatorNumber = 150;
     var meatNumber = 10;
     var hunterNumber = 30;
     while (grassNumber > 0) {
@@ -110,6 +110,30 @@ function genMatrix(n, m) {
 matrix = genMatrix(n, m);
 //----------------------
 
+function changeWeather(){
+    if(weather == 'spring'){
+        setTimeout(function(){
+            weather = 'summer';
+        }, 6000);
+    }
+    else if(weather == 'summer'){
+        setTimeout(function(){
+            weather = 'autumn';
+        }, 6000);
+    }
+    else if(weather == 'autumn'){
+        setTimeout(function(){
+            weather = 'winter';
+        }, 6000);
+    }
+    else if(weather == 'winter'){
+        setTimeout(function(){
+            weather = 'spring';
+        }, 6000);
+    }
+    io.sockets.emit('exanak', weather);
+}
+
 
 //matrixi stexcum yst objectneri
 for (var y = 0; y < n; y++) {
@@ -160,7 +184,8 @@ function drawMatrix() {
         geArr[i].die();
     }
     for (var i in predatorArr) {
-        predatorArr[i].move();
+        predatorArr[i].move1();
+        predatorArr[i].move2();
         predatorArr[i].eat();
         predatorArr[i].eatMeat2();
         predatorArr[i].mul();
@@ -178,12 +203,45 @@ function drawMatrix() {
     io.sockets.emit('matrix', matrix);
     //----------------------
     io.on('connection', function (socket) {
-        socket.on('clear', function(data){
-            geNumber = 0;
-            geArr = [];
+        socket.on('clear', function(){
+            for (var y = 0; y < matrix.length; y++) {
+                for (var x = 0; x < matrix[y].length; x++) {
+                    matrix[y][x] = 0;
+                    matrix[5][10] = 50;
+                    matrix[6][10] = 50;
+                    matrix[7][10] = 50;
+                    matrix[8][10] = 50;
+                    matrix[9][10] = 50;
+                    matrix[10][10] = 50;
+                    matrix[11][10] = 50;
+                    matrix[8][11] = 50;
+                    matrix[8][12] = 50;
+                    matrix[8][13] = 50;
+                    matrix[8][14] = 50;
+                    matrix[5][14] = 50;
+                    matrix[6][14] = 50;
+                    matrix[7][14] = 50;
+                    matrix[8][14] = 50;
+                    matrix[9][14] = 50;
+                    matrix[10][14] = 50;
+                    matrix[11][14] = 50;
+                    matrix[5][17] = 50;
+                    matrix[7][17] = 50;
+                    matrix[8][17] = 50;
+                    matrix[9][17] = 50;
+                    matrix[10][17] = 50;
+                    matrix[11][17] = 50;
+                }
+            }
+            grassArr.length = 0;
+            geArr.length = 0;
+            hunterArr.length = 0;
+            meatArr.length = 0;
+            predatorArr.length = 0;
         });
     });
 }
 //----------------------
 
 setInterval(drawMatrix, 500);
+setInterval(changeWeather, 6000);
