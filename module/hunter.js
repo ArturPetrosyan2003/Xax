@@ -39,7 +39,7 @@ module.exports = class Hunter extends livingCreator{
         this.getNewCoordinates();
         return super.chooseCell(character);
     }
-    move() {
+    move1() {
         var vandakner = Random(this.chooseCell(0));
         if (vandakner) {
             this.energy--;
@@ -48,6 +48,22 @@ module.exports = class Hunter extends livingCreator{
             var newY = vandakner[1];
 
             matrix[this.y][this.x] = 0;
+            matrix[newY][newX] = 4;
+
+            this.x = newX;
+            this.y = newY;
+        }
+
+    }
+    move2() {
+        var vandakner = Random(this.chooseCell(1));
+        if (vandakner) {
+            this.energy--;
+
+            var newX = vandakner[0];
+            var newY = vandakner[1];
+
+            matrix[this.y][this.x] = 1;
             matrix[newY][newX] = 4;
 
             this.x = newX;

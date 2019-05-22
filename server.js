@@ -46,11 +46,12 @@ function genMatrix(n, m) {
             matrix[y][x] = 0;
         }
     }
-    var grassNumber = 300;
-    var geNumber = 250;
-    var predatorNumber = 150;
-    var meatNumber = 10;
-    var hunterNumber = 30;
+    grassNumber = 300;
+    geNumber = 300;
+    predatorNumber = 70;
+    meatNumber = 10;
+    hunterNumber = 30;
+    spaceCount = 0;
     while (grassNumber > 0) {
         y = Math.floor(Math.random() * n);
         x = Math.floor(Math.random() * m);
@@ -142,22 +143,27 @@ for (var y = 0; y < n; y++) {
         if (matrix[y][x] == 1) {
             var gr = new Grass(x, y, 1);
             grassArr.push(gr);
+            grassNumber++;
         }
         else if (matrix[y][x] == 2) {
             var ge = new GrassEater(x, y, 2);
             geArr.push(ge);
+            geNumber++;
         }
         else if (matrix[y][x] == 3) {
             var pr = new Predator(x, y, 3);
             predatorArr.push(pr);
+            predatorNumber++;
         }
         else if (matrix[y][x] == 4) {
             var hunter = new Hunter(x, y, 4);
             hunterArr.push(hunter);
+            hunterNumber++;
         }
         else if (matrix[y][x] == 5) {
             var meat = new Meat(x, y, 5);
             meatArr.push(meat);
+            meatNumber++;
 
             setInterval(function () {
                 let i = 0;
@@ -192,7 +198,8 @@ function drawMatrix() {
         predatorArr[i].die();
     }
     for (var i in hunterArr) {
-        hunterArr[i].move();
+        hunterArr[i].move1();
+        hunterArr[i].move2();
         hunterArr[i].eatPred();
         hunterArr[i].eatMeat();
         hunterArr[i].eatGrassEater();
@@ -239,9 +246,72 @@ function drawMatrix() {
             meatArr.length = 0;
             predatorArr.length = 0;
         });
+        socket.on('refresh', function(){
+            grassArr.length = 0;
+            geArr.length = 0;
+            hunterArr.length = 0;
+            meatArr.length = 0;
+            predatorArr.length = 0;
+            matrix = genMatrix(n, m);
+            for (var y = 0; y < n; y++) {
+                for (var x = 0; x < m; x++) {
+            
+                    if (matrix[y][x] == 1) {
+                        var gr = new Grass(x, y, 1);
+                        grassArr.push(gr);
+                        grassNumber++;
+                    }
+                    else if (matrix[y][x] == 2) {
+                        var ge = new GrassEater(x, y, 2);
+                        geArr.push(ge);
+                        geNumber++;
+                    }
+                    else if (matrix[y][x] == 3) {
+                        var pr = new Predator(x, y, 3);
+                        predatorArr.push(pr);
+                        predatorNumber++;
+                    }
+                    else if (matrix[y][x] == 4) {
+                        var hunter = new Hunter(x, y, 4);
+                        hunterArr.push(hunter);
+                        hunterNumber++;
+                    }
+                    else if (matrix[y][x] == 5) {
+                        var meat = new Meat(x, y, 5);
+                        meatArr.push(meat);
+                        meatNumber++;
+            
+                        setInterval(function () {
+                            let i = 0;
+                            if (meatArr[i]) {
+                                meatArr[i].poxel();
+                                i++;
+                            }
+                        }, 4000);
+                    }
+                }
+            }
+        });
     });
 }
 //----------------------
 
+io.on('connection', function (socket) {
+    socket.on('clear', function(s){
+        spaceCount = s;
+    });
+});
+
+var  obj = {'info': []};
+
+function main(){
+    var file = 'Statistics.json';
+    obj.info.push({'Cnvac xoter': grassNumber, 'Cnvac Xotakerner': geNumber, 'Cnvac Gishatichner': predatorNumber, 'Cnvac Vorsordner': hunterNumber, 'Cnvac Mser': meatNumber, 'Space Number': spaceCount});
+    fs.writeFileSync(file, JSON.stringify(obj,null,3));
+}
+
+
+
 setInterval(drawMatrix, 500);
 setInterval(changeWeather, 6000);
+setInterval(main, 3000);

@@ -1,6 +1,9 @@
 var side = 15;
 var socket = io();
 var clientWeather = 'spring';
+let col;
+let btn;
+var spaceNumber = 0;
 
 function setup() {
     frameRate(5);
@@ -8,26 +11,35 @@ function setup() {
     background('#acacac');
     socket.on('matrix', drawMatrix);
     socket.on('exanak', drawWeather);
+    col = document.getElementById('col');
+    btn = document.getElementById('btn').addEventListener('click', Emit);
+    function Emit() {
+        socket.emit('refresh');
+        document.getElementById('btn').blur();
+    }
 }
 
-socket.on('exanak', function(w){
+
+
+
+socket.on('exanak', function (w) {
     clientWeather = w;
     console.log(clientWeather);
 });
 
-function drawWeather(w){
+function drawWeather(w) {
     var p = document.getElementById('exanakiP');
     var weather = w;
-    if(weather == 'spring'){
+    if (weather == 'spring') {
         p.innerText = 'Spring';
     }
-    else if(weather == 'summer'){
+    else if (weather == 'summer') {
         p.innerText = 'Summer';
     }
-    else if(weather == 'autumn'){
+    else if (weather == 'autumn') {
         p.innerText = 'Autumn';
     }
-    else if(weather == 'winter'){
+    else if (weather == 'winter') {
         p.innerText = 'Winter';
     }
 
@@ -40,17 +52,21 @@ function drawMatrix(matrix) {
                 fill("#acacac");
             }
             else if (matrix[y][x] == 1) {
-                if(clientWeather == 'summer'){
+                if (clientWeather == 'summer') {
                     fill("green");
+                    col.style.background = 'green';
                 }
-                else if(clientWeather == 'autumn'){
+                else if (clientWeather == 'autumn') {
                     fill("#ffd400");
+                    col.style.background = '#ffd400';
                 }
-                else if(clientWeather == 'winter'){
+                else if (clientWeather == 'winter') {
                     fill('white');
+                    col.style.background = 'white';
                 }
-                else if(clientWeather == 'spring'){
+                else if (clientWeather == 'spring') {
                     fill('#49ff35');
+                    col.style.background = '#49ff35';
                 }
             }
             else if (matrix[y][x] == 2) {
@@ -73,14 +89,11 @@ function drawMatrix(matrix) {
     }
 }
 
-function keyPressed(){
-    if(keyCode === 32){
-        socket.emit('clear');
+function keyPressed() {
+    if (keyCode === 32) {
+        spaceNumber++;
+        socket.emit('clear', spaceNumber);
         console.log(30);
-    }
-    else if(keyCode === 38){
-        socket.emit('set');
-        console.log(50);
     }
 }
 
@@ -88,6 +101,6 @@ function keyPressed(){
 
 
 
-   
-    
+
+
 
