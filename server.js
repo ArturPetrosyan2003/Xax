@@ -296,20 +296,30 @@ function drawMatrix() {
 }
 //----------------------
 
-io.on('connection', function (socket) {
-    socket.on('clear', function(s){
-        spaceCount = s;
-    });
-});
-
 var  obj = {'info': []};
 
 function main(){
     var file = 'Statistics.json';
     obj.info.push({'Cnvac xoter': grassNumber, 'Cnvac Xotakerner': geNumber, 'Cnvac Gishatichner': predatorNumber, 'Cnvac Vorsordner': hunterNumber, 'Cnvac Mser': meatNumber, 'Space Number': spaceCount});
     fs.writeFileSync(file, JSON.stringify(obj,null,3));
+    var data = {
+    'num1': grassNumber,
+    'num2': geNumber,
+    'num3': predatorNumber,
+    'num4': hunterNumber,
+    'num5': meatNumber,
+    'num6': spaceCount
+    };
+    io.on('connection', function (socket) {
+        socket.emit('info', data);
+    });
 }
 
+io.on('connection', function (socket) {
+    socket.on('clear', function(s){
+        spaceCount = s;
+    });
+});
 
 
 setInterval(drawMatrix, 500);
