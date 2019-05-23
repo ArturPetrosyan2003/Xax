@@ -3,9 +3,6 @@
 	<head>
 		<title></title>
 		<meta charset="utf8">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
-		<script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-		<script type="text/javascript" src="script.js"></script>
 		<style>
 			#legend {
 				position: absolute;
@@ -27,8 +24,16 @@
 			#btn{
 				background: orange;
 				color: white;
-				height: 30px;
-				widows: 80px;
+				height: 80px;
+				width: 150px;
+				float: right;
+				margin-right: 1000px;
+				margin-top: 33%;
+				font-size: 30px;
+			}
+			#btn:hover{
+				background: yellow;
+				color: darkgreen;
 			}
 			#info2{
 				background: yellow;
@@ -55,6 +60,8 @@
 				text-align: center;
 				font-size: 25px;
 				height: 40px;
+				margin-left: 30px;
+				color: darkred;
 			}
 		</style>
 	</head>
@@ -127,5 +134,8 @@
 				<td></td>
 			</tr>
 		</table>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
+		<script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+		<script type="text/javascript" src="script.js"></script>
 	</body>
 </html>
