@@ -3,7 +3,7 @@ var socket = io();
 var clientWeather = 'spring';
 let col;
 let btn;
-var spaceNumber = 0;
+let spaceNumber = 0;
 let p1;
 
 function setup() {
@@ -47,7 +47,7 @@ function drawWeather(w) {
 
 }
 
-function drawInfo(i){
+function drawInfo(i) {
     p1 = document.getElementById('info1');
     var p2 = document.getElementById('info2');
     var p3 = document.getElementById('info3');
@@ -55,6 +55,7 @@ function drawInfo(i){
     var p5 = document.getElementById('info5');
     var p6 = document.getElementById('info6');
     var info = i;
+    console.log(i);
     p1.innerText = 'Grass Number:' + info.num1;
     p2.innerText = 'Grass Eater Number:' + info.num2;
     p3.innerText = 'Predator Number:' + info.num3;
@@ -73,22 +74,20 @@ function drawMatrix(matrix) {
                 if (clientWeather == 'summer') {
                     fill("green");
                     col.style.background = 'green';
-                    p1.style.background = 'green';
                 }
                 else if (clientWeather == 'autumn') {
                     fill("#ffd400");
                     col.style.background = '#ffd400';
-                    p1.style.background = '#ffd400';
+
                 }
                 else if (clientWeather == 'winter') {
                     fill('white');
                     col.style.background = 'white';
-                    p1.style.background = 'white';
                 }
                 else if (clientWeather == 'spring') {
                     fill('#49ff35');
                     col.style.background = '#49ff35';
-                    p1.style.background = '#49ff35';
+
                 }
             }
             else if (matrix[y][x] == 2) {
@@ -112,10 +111,10 @@ function drawMatrix(matrix) {
 }
 
 function keyPressed() {
-    if (keyCode === 32) {
-        spaceNumber++;
+    if (keyCode == 32) {
+        ++spaceNumber;
         socket.emit('clear', spaceNumber);
-        console.log(30);
+        console.log(spaceNumber);
     }
 }
 

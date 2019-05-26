@@ -16,12 +16,12 @@ server.listen(3000, function () {
 
 
 //popoxakanner
- Grass = require('./module/grass.js');
- GrassEater = require('./module/grassEater.js');
- Predator = require('./module/predator.js');
- Hunter = require('./module/hunter.js');
- Meat = require('./module/meat.js');
- weather = 'spring';
+Grass = require('./module/grass.js');
+GrassEater = require('./module/grassEater.js');
+Predator = require('./module/predator.js');
+Hunter = require('./module/hunter.js');
+Meat = require('./module/meat.js');
+weather = 'spring';
 
 
 grassArr = [];
@@ -29,12 +29,13 @@ geArr = [];
 predatorArr = [];
 hunterArr = [];
 meatArr = [];
+spaceCount = 0;
 
 n = 50;
 m = 50;
 //----------------------
 
-Random = function(arr) {
+Random = function (arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 //matrixi generacum
@@ -51,7 +52,6 @@ function genMatrix(n, m) {
     predatorNumber = 70;
     meatNumber = 10;
     hunterNumber = 30;
-    spaceCount = 0;
     while (grassNumber > 0) {
         y = Math.floor(Math.random() * n);
         x = Math.floor(Math.random() * m);
@@ -111,24 +111,24 @@ function genMatrix(n, m) {
 matrix = genMatrix(n, m);
 //----------------------
 
-function changeWeather(){
-    if(weather == 'spring'){
-        setTimeout(function(){
+function changeWeather() {
+    if (weather == 'spring') {
+        setTimeout(function () {
             weather = 'summer';
         }, 6000);
     }
-    else if(weather == 'summer'){
-        setTimeout(function(){
+    else if (weather == 'summer') {
+        setTimeout(function () {
             weather = 'autumn';
         }, 6000);
     }
-    else if(weather == 'autumn'){
-        setTimeout(function(){
+    else if (weather == 'autumn') {
+        setTimeout(function () {
             weather = 'winter';
         }, 6000);
     }
-    else if(weather == 'winter'){
-        setTimeout(function(){
+    else if (weather == 'winter') {
+        setTimeout(function () {
             weather = 'spring';
         }, 6000);
     }
@@ -210,7 +210,7 @@ function drawMatrix() {
     io.sockets.emit('matrix', matrix);
     //----------------------
     io.on('connection', function (socket) {
-        socket.on('clear', function(){
+        socket.on('clear', function () {
             for (var y = 0; y < matrix.length; y++) {
                 for (var x = 0; x < matrix[y].length; x++) {
                     matrix[y][x] = 0;
@@ -246,7 +246,7 @@ function drawMatrix() {
             meatArr.length = 0;
             predatorArr.length = 0;
         });
-        socket.on('refresh', function(){
+        socket.on('refresh', function () {
             grassArr.length = 0;
             geArr.length = 0;
             hunterArr.length = 0;
@@ -255,7 +255,7 @@ function drawMatrix() {
             matrix = genMatrix(n, m);
             for (var y = 0; y < n; y++) {
                 for (var x = 0; x < m; x++) {
-            
+
                     if (matrix[y][x] == 1) {
                         var gr = new Grass(x, y, 1);
                         grassArr.push(gr);
@@ -280,7 +280,7 @@ function drawMatrix() {
                         var meat = new Meat(x, y, 5);
                         meatArr.push(meat);
                         meatNumber++;
-            
+
                         setInterval(function () {
                             let i = 0;
                             if (meatArr[i]) {
@@ -296,32 +296,33 @@ function drawMatrix() {
 }
 //----------------------
 
-var  obj = {'info': []};
-
-function main(){
-    var file = 'Statistics.json';
-    obj.info.push({'Cnvac xoter': grassNumber, 'Cnvac Xotakerner': geNumber, 'Cnvac Gishatichner': predatorNumber, 'Cnvac Vorsordner': hunterNumber, 'Cnvac Mser': meatNumber, 'Space Number': spaceCount});
-    fs.writeFileSync(file, JSON.stringify(obj,null,3));
-    var data = {
-    'num1': grassNumber,
-    'num2': geNumber,
-    'num3': predatorNumber,
-    'num4': hunterNumber,
-    'num5': meatNumber,
-    'num6': spaceCount
-    };
-    io.on('connection', function (socket) {
-        socket.emit('info', data);
-    });
-}
+var obj = { 'info': [] };
 
 io.on('connection', function (socket) {
-    socket.on('clear', function(s){
+    socket.on('clear', function (s) {
+        console.log(s);
         spaceCount = s;
+        console.log(spaceCount);
+
+        var data = {
+            'num1': grassNumber,
+            'num2': geNumber,
+            'num3': predatorNumber,
+            'num4': hunterNumber,
+            'num5': meatNumber,
+            'num6': spaceCount
+        };
+        socket.emit('info', data);
     });
 });
+
+function main() {
+    var file = 'Statistics.json';
+    obj.info.push({ 'Cnvac xoter': grassNumber, 'Cnvac Xotakerner': geNumber, 'Cnvac Gishatichner': predatorNumber, 'Cnvac Vorsordner': hunterNumber, 'Cnvac Mser': meatNumber, 'Space Number': spaceCount });
+    fs.writeFileSync(file, JSON.stringify(obj, null, 3));
+}
 
 
 setInterval(drawMatrix, 500);
 setInterval(changeWeather, 6000);
-setInterval(main, 3000);
+setInterval(main, 1000);
